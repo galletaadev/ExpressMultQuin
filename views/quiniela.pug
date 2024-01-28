@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  .container
+    h1 Quiniela de futbol
+    button(onclick="solicitarQuiniela()") Generar quiniela
+    ul#quinielaResult
+
+  script(src="/socket.io/socket.io.js")
+  script.
+    var socket = io();
+    function solicitarQuiniela() {
+      socket.emit('solicitarQuiniela');
+    }
+
+    socket.on('resultadoQuiniela', function(quiniela) {
+      var lista = document.getElementById('quinielaResult');
+      lista.innerHTML = '';
+      quiniela.forEach(function(resultado) {
+        var li = document.createElement('li');
+        li.textContent = resultado;
+        lista.appendChild(li);
+      });
+    });
